@@ -42,7 +42,76 @@ public class MsgEvent {
 		  this.params = new HashMap<String,String>();
 		  params.put("msg", msgBody);
 	  }
-	  public String getMsgBody()
+	  public void setSrc(String region, String agent, String plugin)
+	  {
+		  setParam("src_region",region);
+		  setParam("src_agent",agent);
+		  setParam("src_plugin",plugin);	  
+	  }
+	  public void setDst(String region, String agent, String plugin)
+	  {
+		  setParam("dst_region",region);
+		  setParam("dst_agent",agent);
+		  setParam("dst_plugin",plugin);	  
+	  }
+	  /*
+	  public void swapSrcDst()
+	  {
+		  String src_region = getParam("src_region");
+		  String src_agent = getParam("src_agent");
+		  String src_plugin = getParam("src_plugin");
+		  setParam("src_region",getParam("dst_region"));
+		  setParam("src_agent",getParam("dst_region"));
+		  setParam("src_plugin",getParam("dst_region"));
+		  setParam("dst_region",getParam(src_region));
+		  setParam("dst_agent",getParam(src_agent));
+		  setParam("dst_plugin",getParam(src_plugin));
+	  }
+	  */
+	
+	public void setReturn()
+	  {
+		  
+		String src_region = new String(getParam("src_region"));
+		String src_agent = new String(getParam("src_agent"));
+		String src_plugin = null;
+		if(getParam("src_plugin") != null) //plugin
+		{
+			src_plugin = new String(getParam("src_plugin"));
+		}
+		  
+			  
+		  params.remove("src_region");
+		  params.remove("src_agent");
+		  params.remove("src_plugin");
+			 
+		  params.put("src_region", params.get("dst_region"));
+		  params.put("src_agent", params.get("dst_agent"));
+		  if(params.get("dst_plugin") != null)
+		  {
+			  params.put("src_plugin", params.get("dst_plugin"));
+		  }
+			
+		  params.put("dst_region", src_region);
+		  setMsgRegion(src_region);
+		  params.put("dst_agent", src_agent);
+		  setMsgAgent(src_agent);
+			
+		  if(src_plugin != null)
+		  {
+			  params.put("dst_plugin", src_plugin);
+			  setMsgPlugin(src_plugin);
+		  }
+		  else
+		  {
+			  params.remove("dst_plugin");
+			  setMsgPlugin(null);
+		  }
+		  
+		 
+	  }
+	
+	    public String getMsgBody()
 	  {
 		  return params.get("msg");
 	  }
